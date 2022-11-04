@@ -1,6 +1,5 @@
 from flask import Flask, jsonify, redirect, url_for
-from mensa_parser.speiseplan_website_parser import get_speiseplan, \
-    simple_adapter
+from uniulm_mensaparser.mensa_parser import parser, adapter
 from cachetools import cached, TTLCache
 from datetime import date, timedelta
 
@@ -9,8 +8,7 @@ from datetime import date, timedelta
 @cached(cache=TTLCache(maxsize=4, ttl=3600))
 def get_cached_plan():
     print("parse plan...")
-    plan = get_speiseplan()
-    formatted = simple_adapter(plan)
+    formatted = parser.get_current_plans(adapter_class=adapter.SimpleAdapter)
     return formatted
 
 
