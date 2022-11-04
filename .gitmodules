@@ -1,0 +1,3 @@
+[submodule "uniulm_mensaparser"]
+	path = uniulm_mensaparser
+	url = https://github.com/Tanikai/uniulm_mensaparser
