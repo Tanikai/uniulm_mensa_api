@@ -2,6 +2,7 @@ from flask import Flask, jsonify, redirect, url_for
 from mensa_parser import parser, adapter
 from cachetools import cached, TTLCache
 from datetime import date, timedelta
+from flask_matomo import Matomo
 
 
 # cache parsed plan for 1 hour
@@ -12,12 +13,23 @@ def get_cached_plan():
     return formatted
 
 
-def create_app():
+def create_app(config: dict):
     app = Flask(__name__)
 
+    if config["Matomo"]["enabled"]:
+        matomo = Matomo(app,
+                        matomo_url=config["Matomo"]["url"],
+                        id_site=config["Matomo"]["site_id"],
+                        token_auth=config["Matomo"]["token_auth"],
+                        )
+    else:
+        # noop-matomo
+        matomo = Matomo(app=None, matomo_url="placeholder", id_site=-1)
+
     @app.route("/")
+    @matomo.ignore()
     def index():
-        return "hello"
+        return redirect("https://github.com/Tanikai/uniulm_mensa_api", 302)
 
     @app.route("/api/v1/canteens/<mensa_id>/days/<mensa_date>/meals",
                methods=["GET"])
@@ -59,9 +71,3 @@ def create_app():
                                 mensa_date=date_key))
 
     return app
-
-
-if __name__ == "__main__":
-    flask_app = create_app()
-    print(flask_app.view_functions)
-    flask_app.run()
