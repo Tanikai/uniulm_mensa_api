@@ -1,5 +1,5 @@
 flask
 waitress
 cachetools
-flask-matomo
+git+https://github.com/Tanikai/flask-matomo@v1.3.0
 git+https://github.com/Tanikai/uniulm_mensaparser@main
