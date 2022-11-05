@@ -1,5 +1,6 @@
 from flask import Flask, jsonify, redirect, url_for
 from mensa_parser import parser, adapter
+from mensa_parser.speiseplan_website_parser import Canteens
 from cachetools import cached, TTLCache
 from datetime import date, timedelta
 from flask_matomo import Matomo
@@ -9,7 +10,8 @@ from flask_matomo import Matomo
 @cached(cache=TTLCache(maxsize=4, ttl=3600))
 def get_cached_plan():
     print("parse plan...")
-    formatted = parser.get_current_plans(adapter_class=adapter.SimpleAdapter)
+    canteens = {Canteens.UL_UNI_Sued, Canteens.UL_UNI_West}
+    formatted = parser.get_plans_for_canteens(canteens, adapter.SimpleAdapter)
     return formatted
 
 
