@@ -1,3 +1,4 @@
 flask
 waitress
 cachetools
+git+https://github.com/Tanikai/uniulm_mensaparser@main

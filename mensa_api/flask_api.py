@@ -1,5 +1,5 @@
 from flask import Flask, jsonify, redirect, url_for
-from uniulm_mensaparser.mensa_parser import parser, adapter
+from mensa_parser import parser, adapter
 from cachetools import cached, TTLCache
 from datetime import date, timedelta
 
