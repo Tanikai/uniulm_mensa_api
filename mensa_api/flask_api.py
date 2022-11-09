@@ -1,9 +1,12 @@
+import flask
 from flask import Flask, jsonify, redirect, url_for
 from mensa_parser import parser, adapter
 from mensa_parser.speiseplan_website_parser import Canteens
 from cachetools import cached, TTLCache
 from datetime import date, timedelta
 from flask_matomo import Matomo
+from flask_limiter import Limiter
+from flask_limiter.util import get_remote_address
 
 
 # cache parsed plan for 1 hour
@@ -28,6 +31,8 @@ def create_app(config: dict):
         # noop-matomo
         matomo = Matomo(app=None, matomo_url="placeholder", id_site=-1)
 
+    limiter = Limiter(app, key_func=get_remote_address)
+
     @app.route("/")
     @matomo.ignore()
     def index():
@@ -35,6 +40,7 @@ def create_app(config: dict):
 
     @app.route("/api/v1/canteens/<mensa_id>/days/<mensa_date>/meals",
                methods=["GET"])
+    @limiter.limit("30/minute")
     def return_mensaplan(mensa_id, mensa_date):
         formatted = get_cached_plan()
         try:
@@ -43,6 +49,7 @@ def create_app(config: dict):
         except KeyError:
             return f"Could not find plan for {mensa_id} on date {mensa_date}", 404
 
+    @limiter.limit("30/minute")
     @app.route("/api/v1/canteens/<mensa_id>", methods=["GET"])
     def return_next_plan(mensa_id):
         formatted = get_cached_plan()
@@ -71,5 +78,9 @@ def create_app(config: dict):
 
         return redirect(url_for("return_mensaplan", mensa_id=mensa_id,
                                 mensa_date=date_key))
+
+    @app.errorhandler(429)
+    def ratelimit_handler(e):
+        return flask.Response("ratelimited", 429)
 
     return app
