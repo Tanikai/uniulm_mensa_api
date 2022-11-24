@@ -1,5 +1,5 @@
 import flask
-from flask import Flask, jsonify, redirect, url_for
+from flask import Flask, jsonify, redirect, url_for, make_response, Response, json
 from mensa_parser import parser, adapter
 from mensa_parser.speiseplan_website_parser import Canteens
 from cachetools import cached, TTLCache
@@ -7,6 +7,7 @@ from datetime import date, timedelta
 from flask_matomo import Matomo
 from flask_limiter import Limiter
 from flask_limiter.util import get_remote_address
+import gzip
 
 
 # cache parsed plan for 1 hour
@@ -16,6 +17,14 @@ def get_cached_plan():
     canteens = {Canteens.UL_UNI_Sued, Canteens.UL_UNI_West}
     formatted = parser.get_plans_for_canteens(canteens, adapter.SimpleAdapter)
     return formatted
+
+def make_compressed_response(resp: dict) -> Response:
+    content = gzip.compress(json.dumps(resp).encode('utf8'), 5)
+    response = make_response(content)
+    response.headers['Content-length'] = len(content)
+    response.headers['Content-Encoding'] = 'gzip'
+    response.headers['Content-Type'] = "application/json"
+    return response
 
 
 def create_app(config: dict):
@@ -45,7 +54,7 @@ def create_app(config: dict):
         formatted = get_cached_plan()
         try:
             day_plan = formatted[mensa_id][mensa_date]
-            return jsonify(day_plan)
+            return make_compressed_response(day_plan)
         except KeyError:
             return f"Could not find plan for {mensa_id} on date {mensa_date}", 404
 
@@ -78,6 +87,13 @@ def create_app(config: dict):
 
         return redirect(url_for("return_mensaplan", mensa_id=mensa_id,
                                 mensa_date=date_key))
+
+    @limiter.limit("30/minute")
+    @app.route("/api/v1/canteens/<mensa_id>/all", methods=["GET"])
+    def return_all(mensa_id):
+        formatted = get_cached_plan()
+        # ggf. hier noch nen adapter
+        return make_compressed_response(formatted)
 
     @app.errorhandler(429)
     def ratelimit_handler(e):
