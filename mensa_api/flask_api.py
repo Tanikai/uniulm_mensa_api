@@ -19,11 +19,12 @@ def get_cached_plan():
     return formatted
 
 def make_compressed_response(resp: dict) -> Response:
-    content = gzip.compress(json.dumps(resp).encode('utf8'), 5)
+    json_text = json.dumps(resp, ensure_ascii=False)
+    content = gzip.compress(json_text.encode('utf8'), 5)
     response = make_response(content)
     response.headers['Content-length'] = len(content)
     response.headers['Content-Encoding'] = 'gzip'
-    response.headers['Content-Type'] = "application/json"
+    response.headers['Content-Type'] = "application/json; charset=utf-8"
     return response
 
 
