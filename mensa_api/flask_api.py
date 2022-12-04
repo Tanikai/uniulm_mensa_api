@@ -1,5 +1,6 @@
 import flask
 from flask import Flask, jsonify, redirect, url_for, make_response, Response, json
+from flask_cors import CORS
 from mensa_parser import parser, adapter
 from mensa_parser.speiseplan_website_parser import Canteens
 from cachetools import cached, TTLCache
@@ -30,6 +31,7 @@ def make_compressed_response(resp: dict) -> Response:
 
 def create_app(config: dict):
     app = Flask(__name__)
+    CORS(app)
 
     if config["Matomo"]["enabled"]:
         matomo = Matomo(app,
