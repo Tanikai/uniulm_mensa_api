@@ -23,14 +23,18 @@ def make_compressed_response(resp: dict) -> Response:
 
 class MensaApi(Flask):
     plan = None
+    last_updated = None
     canteens = {Canteens.UL_UNI_Sued, Canteens.UL_UNI_West}
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
 
     def refresh_plan(self):
-        print(datetime.datetime.now(), ": plan refreshed")
+        update = datetime.datetime.now()
+        print(update, ": plan refreshed")
+        self.last_updated = update.isoformat()
         self.plan = parser.get_plans_for_canteens(self.canteens, adapter.SimpleAdapter)
+        self.plan["last_updated"] = self.last_updated
 
     def get_plan(self):
         if self.plan is None:
