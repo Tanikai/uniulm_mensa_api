@@ -1,7 +1,5 @@
 import configparser
 from mensa_api import flask_api
-from apscheduler.schedulers.background import BackgroundScheduler
-from apscheduler.triggers.cron import CronTrigger
 
 
 def parse_config():
@@ -30,14 +28,8 @@ def parse_config():
 
 config = parse_config()
 application = flask_api.create_app(config)
-scheduler = BackgroundScheduler()
 
 if __name__ == "__main__":
     app = flask_api.create_app(config)
-    app.refresh_plan()
-
-    scheduler.add_job(app.refresh_plan, CronTrigger.from_crontab("0 9 * * *"), jitter=600)  # at 9 am
-    scheduler.start()
-
     app.run()
 

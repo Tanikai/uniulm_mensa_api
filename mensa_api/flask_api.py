@@ -9,6 +9,8 @@ from flask_matomo import Matomo
 from flask_limiter import Limiter
 from flask_limiter.util import get_remote_address
 import gzip
+from apscheduler.schedulers.background import BackgroundScheduler
+from apscheduler.triggers.cron import CronTrigger
 
 
 def make_compressed_response(resp: dict) -> Response:
@@ -28,10 +30,15 @@ class MensaApi(Flask):
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
+        self.scheduler = BackgroundScheduler()
+        self.scheduler.add_job(self.refresh_plan, CronTrigger.from_crontab("0 9 * * *"), jitter=600)  # at 9 am
+        self.scheduler.start()
+        self.refresh_plan()
 
     def refresh_plan(self):
         update = datetime.datetime.now()
-        print(update, ": plan refreshed")
+        update = update.replace(microsecond=0)
+        print(update, "plan refreshed")
         self.last_updated = update.isoformat()
         self.plan = parser.get_plans_for_canteens(self.canteens, adapter.SimpleAdapter)
         self.plan["last_updated"] = self.last_updated
