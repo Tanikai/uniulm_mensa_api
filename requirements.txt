@@ -2,6 +2,7 @@ flask==2.2.2
 waitress==2.1.2
 flask-limiter==2.8.1
 flask-cors==3.0.10
+flask-compress==1.13
 apscheduler==3.9.1.post1
 git+https://github.com/Tanikai/flask-matomo@v1.3.0
 git+https://github.com/Tanikai/uniulm_mensaparser@main

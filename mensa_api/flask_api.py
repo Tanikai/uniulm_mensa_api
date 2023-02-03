@@ -8,17 +8,14 @@ from datetime import date, timedelta
 from flask_matomo import Matomo
 from flask_limiter import Limiter
 from flask_limiter.util import get_remote_address
-import gzip
 from apscheduler.schedulers.background import BackgroundScheduler
 from apscheduler.triggers.cron import CronTrigger
 
 
-def make_compressed_response(resp: dict) -> Response:
-    json_text = json.dumps(resp, ensure_ascii=False)
-    content = gzip.compress(json_text.encode('utf8'), 5)
-    response = make_response(content)
-    response.headers['Content-length'] = len(content)
-    response.headers['Content-Encoding'] = 'gzip'
+def make_json_response(resp: dict) -> Response:
+    json_text = json.dumps(resp, ensure_ascii=False).encode('utf8')
+    response = make_response(json_text)
+    response.headers['Content-length'] = len(json_text)
     response.headers['Content-Type'] = "application/json; charset=utf-8"
     return response
 
@@ -77,7 +74,7 @@ def create_app(config: dict):
         formatted = app.get_plan()
         try:
             day_plan = formatted[mensa_id][mensa_date]
-            return make_compressed_response(day_plan)
+            return make_json_response(day_plan)
         except KeyError:
             return f"Could not find plan for {mensa_id} on date {mensa_date}", 404
 
@@ -116,7 +113,7 @@ def create_app(config: dict):
     def return_all(mensa_id):
         formatted = app.get_plan()
         # ggf. hier noch nen adapter
-        return make_compressed_response(formatted)
+        return make_json_response(formatted)
 
     @app.errorhandler(429)
     def ratelimit_handler(e):

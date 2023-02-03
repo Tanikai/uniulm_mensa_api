@@ -1,5 +1,6 @@
 import configparser
 from mensa_api import flask_api
+from flask_compress import Compress
 
 
 def parse_config():
@@ -28,8 +29,10 @@ def parse_config():
 
 config = parse_config()
 application = flask_api.create_app(config)
+compress = Compress()
 
 if __name__ == "__main__":
     app = flask_api.create_app(config)
+    compress.init_app(app)
     app.run()
 
