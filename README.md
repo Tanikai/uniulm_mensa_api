@@ -50,10 +50,16 @@ The following canteens at Ulm University are currently supported:
 - Mensa Süd (id: **ul_uni_sued**)
 - Mensa West (id: **ul_uni_west**)
 
-| Path                                                      | Description                                                                        |
-|-----------------------------------------------------------|------------------------------------------------------------------------------------|
-| BASE_URL/api/v1/canteens/CANTEEN_ID/                      | Get the next plan for the Mensa Süd (days where the canteen is closed are skipped) |
-| BASE_URL/api/v1/canteens/CANTEEN_ID/days/YYYY-MM-DD/meals | Get the mensa plan for a specific day                                              |
+Support for Mensa Nord (Bistro) is planned.
+
+| Path                                                        | Description                                                                                      |
+|-------------------------------------------------------------|--------------------------------------------------------------------------------------------------|
+| `BASE_URL/api/v1/canteens/CANTEEN_ID/`                      | Get the next daily plan for the specified canteen (days where the canteen is closed are skipped) |
+| `BASE_URL/api/v1/canteens/CANTEEN_ID/days/YYYY-MM-DD/meals` | Get the canteen plan for a specific day                                                          |
+| `BASE_URL/api/v1/canteens/CANTEEN_ID/all`                   | Get all plans for the specified canteen                                                          |
+| `BASE_URL/api/v1/mensaplan.json`                            | Data in [FS-ET format](https://mensaplan.fs-et.de/data/mensaplan.json) (work in progess)         |
+
+
 ## Analytics
 
 To track the API usage in a GDPR-friendly way, a Python integration
@@ -83,7 +89,7 @@ token_auth = YOUR_API_TOKEN
 
 ## Authors
 
-- **Kai Anter** - [GitHub](https://github.com/Tanikai) - [Twitter](https://twitter.com/tanikai29)
+- **Kai Anter** - [GitHub](https://github.com/Tanikai) - [Mastodon](https://hachyderm.io/@tanikai)
 
 ## License
 
