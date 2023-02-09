@@ -13,7 +13,7 @@ from apscheduler.triggers.cron import CronTrigger
 
 
 def make_json_response(resp: dict) -> Response:
-    json_text = json.dumps(resp, ensure_ascii=False).encode('utf8')
+    json_text = json.dumps(resp, ensure_ascii=False, sort_keys=False).encode('utf8')
     response = make_response(json_text)
     response.headers['Content-length'] = len(json_text)
     response.headers['Content-Type'] = "application/json; charset=utf-8"
@@ -22,6 +22,7 @@ def make_json_response(resp: dict) -> Response:
 
 class MensaApi(Flask):
     plan = None
+    fs_et_plan = None
     last_updated = None
     canteens = {Canteens.UL_UNI_Sued, Canteens.UL_UNI_West}
 
@@ -39,11 +40,18 @@ class MensaApi(Flask):
         self.last_updated = update.isoformat()
         self.plan = parser.get_plans_for_canteens(self.canteens, adapter.SimpleAdapter)
         self.plan["last_updated"] = self.last_updated
+        self.fs_et_plan = parser.get_plans_for_canteens(self.canteens, adapter.FsEtAdapter)
+        self.fs_et_plan["last_updated"] = self.last_updated
 
     def get_plan(self):
         if self.plan is None:
             self.refresh_plan()
         return self.plan
+
+    def get_fs_plan(self):
+        if self.fs_et_plan is None:
+            self.refresh_plan()
+        return self.fs_et_plan
 
 
 def create_app(config: dict):
@@ -114,6 +122,11 @@ def create_app(config: dict):
         formatted = app.get_plan()
         # ggf. hier noch nen adapter
         return make_json_response(formatted)
+
+    @limiter.limit("30/minute")
+    @app.route("/api/v1/mensaplan.json")
+    def return_fs_et():
+        return make_json_response(app.get_fs_plan())
 
     @app.errorhandler(429)
     def ratelimit_handler(e):
