@@ -2,8 +2,7 @@ import datetime
 import flask
 from flask import Flask, redirect, url_for, make_response, Response, json
 from flask_cors import CORS
-from mensa_parser import parser, adapter
-from mensa_parser.speiseplan_website_parser import Canteens
+from uniulm_mensaparser import get_plan, Canteen, SimpleAdapter2, FsEtAdapter
 from datetime import date, timedelta
 from flask_matomo import Matomo
 from flask_limiter import Limiter
@@ -24,7 +23,7 @@ class MensaApi(Flask):
     plan = None
     fs_et_plan = None
     last_updated = None
-    canteens = {Canteens.UL_UNI_Sued, Canteens.UL_UNI_West}
+    canteens = {Canteen.UL_UNI_Sued, Canteen.UL_UNI_West, Canteen.UL_UNI_Nord}
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -36,12 +35,13 @@ class MensaApi(Flask):
     def refresh_plan(self):
         update = datetime.datetime.now()
         update = update.replace(microsecond=0)
-        print(update, "plan refreshed")
         self.last_updated = update.isoformat()
-        self.plan = parser.get_plans_for_canteens(self.canteens, adapter.SimpleAdapter)
+        self.plan = get_plan(canteens=self.canteens, adapter_class=SimpleAdapter2)
         self.plan["last_updated"] = self.last_updated
-        self.fs_et_plan = parser.get_plans_for_canteens(self.canteens, adapter.FsEtAdapter)
+        self.fs_et_plan = get_plan(canteens=self.canteens, adapter_class=FsEtAdapter)
         self.fs_et_plan["last_updated"] = self.last_updated
+        print(self.fs_et_plan)
+        print(update, "plan refreshed")
 
     def get_plan(self):
         if self.plan is None:
@@ -68,7 +68,7 @@ def create_app(config: dict):
         # noop-matomo
         matomo = Matomo(app=None, matomo_url="placeholder", id_site=-1)
 
-    limiter = Limiter(app, key_func=get_remote_address)
+    limiter = Limiter(app=app, key_func=get_remote_address)
 
     @app.route("/")
     @matomo.ignore()
