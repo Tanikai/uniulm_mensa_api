@@ -94,4 +94,4 @@ token_auth = YOUR_API_TOKEN
 ## License
 
 This project is licensed under the GNU General Public License Version 3 - see
-the [LICENSE.md](LICENSE.md) file for details
+the [LICENSE](LICENSE) file for details
