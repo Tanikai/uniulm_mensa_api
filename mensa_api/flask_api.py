@@ -40,7 +40,6 @@ class MensaApi(Flask):
         self.plan["last_updated"] = self.last_updated
         self.fs_et_plan = get_plan(canteens=self.canteens, adapter_class=FsEtAdapter)
         self.fs_et_plan["last_updated"] = self.last_updated
-        print(self.fs_et_plan)
         print(update, "plan refreshed")
 
     def get_plan(self):
