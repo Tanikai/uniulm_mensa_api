@@ -7,7 +7,6 @@ from ..dependencies.mensaparser import MensaParser, get_mensa_parser
 
 router = APIRouter()
 
-
 @router.get("/canteens/{mensa_id}/days/{mensa_date}/meals")
 def return_mensaplan(mensa_id: str, mensa_date: str, mensa_parser: Annotated[MensaParser, Depends(get_mensa_parser)]):
     formatted = mensa_parser.get_plan()
