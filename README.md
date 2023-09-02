@@ -31,7 +31,7 @@ pip install -r requirements.txt
 After that, you can run the REST API with:
 
 ```sh
-python run_api.py
+uvicorn app.main:app --reload
 ```
 
 ## Deployment
@@ -40,7 +40,7 @@ When you want to deploy the application, you will need a WSGI server. For
 example, you can use the [waitress](https://github.com/Pylons/waitress) module:
 
 ```sh
-python -m waitress --port 8080 run_api:application
+uvicorn app.main:app --reload
 ```
 
 ## API Documentation
