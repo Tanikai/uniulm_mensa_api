@@ -7,6 +7,13 @@ from ..dependencies.mensaparser import MensaParser, get_mensa_parser
 
 router = APIRouter()
 
+
+@router.get("/canteens/all")
+def return_all_canteens(mensa_parser: Annotated[Any, Depends(get_mensa_parser)]):
+    formatted = mensa_parser.get_plan()
+    return formatted
+
+
 @router.get("/canteens/{mensa_id}/days/{mensa_date}/meals")
 def return_mensaplan(mensa_id: str, mensa_date: str, mensa_parser: Annotated[MensaParser, Depends(get_mensa_parser)]):
     formatted = mensa_parser.get_plan()
@@ -48,8 +55,11 @@ def return_next_plan(mensa_id: str, mensa_parser: Annotated[MensaParser, Depends
 @router.get("/canteens/{mensa_id}/all")
 def return_all(mensa_id: str, mensa_parser: Annotated[Any, Depends(get_mensa_parser)]):
     formatted = mensa_parser.get_plan()
-    # FIXME: filter by mensa id
-    return formatted
+    try:
+        day_plan = formatted[mensa_id]
+        return day_plan
+    except KeyError:
+        raise HTTPException(status_code=404, detail=f"Could not find plan for {mensa_id}")
 
 
 @router.get("/mensaplan.json")
