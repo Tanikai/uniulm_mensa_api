@@ -62,30 +62,24 @@ Support for Mensa Nord (Bistro) is planned.
 
 ## Analytics
 
-To track the API usage in a GDPR-friendly way, a Python integration
-for [Matomo](https://matomo.org/) is integrated into the project. It is only
-enabled when a `config.ini` file is placed in the root directory (same directory
-as `run_api.py`). If you want to connect the API to your Matomo instance, set
-the following properties:
+To track the API usage in a GDPR-friendly way, a Middleware
+for [Matomo](https://matomo.org/) is integrated into the project. Alternatively,
+you can use [Umami](https://umami.is/). Both are disabled by default.
 
-```ini
-[Matomo]
-enabled = True 
-; The URL to your Matomo instance
-url = YOUR_MATOMO_URL
-; Your Matomo site_id for the API (e.g. 5)
-site_id = YOUR_MATOMO_SITE_ID 
-; Visitor might be behind a proxy. To change the IP address of the 
-; POST Request, an auth token is required. You can get it in Matomo
-; under Settings > Personal > Security > Auth tokens.
-token_auth = YOUR_API_TOKEN
+To enable analytics, set the respective `_ENABLED` variable to `True` and pass
+the required configuration values:
+
+```sh
+# Matomo
+MATOMO_ENABLED=True
+MATOMO_URL=YOUR_MATOMO_URL
+MATOMO_SITE_ID=YOUR_MATOMO_SITE_ID
+
+# Umami
+UMAMI_ENABLED=True
+UMAMI_URL=YOUR_UMAMI_URL
+UMAMI_SITE_ID=YOUR_UMAMI_SITE_ID
 ```
-
-## Built With
-
-- [flask](https://flask.palletsprojects.com/) for the REST API
-- Fork of [flask-matomo](https://flask-matomo.readthedocs.io/en/latest/) for tracking
-  - Fork repository: [github.com/Tanikai/flask-matomo](https://github.com/Tanikai/flask-matomo)
 
 ## Authors
 
