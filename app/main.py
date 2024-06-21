@@ -5,6 +5,7 @@ from fastapi.responses import RedirectResponse
 # Middlewares
 from fastapi.middleware.cors import CORSMiddleware
 from asgi_matomo import MatomoMiddleware
+from umami_asgi import UmamiMiddleware
 
 # Routers
 from .versions import v1
@@ -40,6 +41,20 @@ if config.matomo_enabled:
         idsite=config.matomo_site_id,
     )
     print("enabled matomo integration")
+
+if config.umami_enabled:
+    if config.umami_url is None:
+        raise Exception("Error: environment variable umami_url is missing")
+
+    if config.umami_site_id is None:
+        raise Exception("Error: environment variable umami_website_id is missing")
+
+    app.add_middleware(
+        UmamiMiddleware,
+        api_endpoint=config.umami_url,
+        website_id=config.umami_site_id,
+    )
+    print("enabled umami integration")
 
 @app.get("/")
 async def root():
