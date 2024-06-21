@@ -1,6 +1,6 @@
 APScheduler==3.10.4
 asgi_matomo==0.4.1
-umami-asgi==0.1.0
+umami-asgi==0.2.0
 fastapi==0.109.1
 pydantic_settings==2.0.3
 uvicorn==0.23.2
