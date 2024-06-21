@@ -5,7 +5,7 @@ This project contains a REST API that provides data from the
 module.
 
 The parsed data can be accessed here:
-[uulm.anter.dev/api/v1/canteens/ul_uni_sued](https://uulm.anter.dev/api/v1/canteens/ul_uni_sued)
+[uulm.anter.dev/api/v1/canteens/all](https://uulm.anter.dev/api/v1/canteens/all)
 
 ## Getting Started
 
