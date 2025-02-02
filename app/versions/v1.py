@@ -60,8 +60,3 @@ def return_all(mensa_id: str, mensa_parser: Annotated[Any, Depends(get_mensa_par
         return day_plan
     except KeyError:
         raise HTTPException(status_code=404, detail=f"Could not find plan for {mensa_id}")
-
-
-@router.get("/mensaplan.json")
-def return_fs_et(mensa_parser: Annotated[Any, Depends(get_mensa_parser)]):
-    return mensa_parser.get_fs_plan()

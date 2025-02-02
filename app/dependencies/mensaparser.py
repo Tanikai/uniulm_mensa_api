@@ -1,5 +1,5 @@
 import datetime
-from uniulm_mensaparser import format_meals, get_unformatted_plan, Canteen, SimpleAdapter2, FsEtAdapter
+from uniulm_mensaparser import format_meals, get_unformatted_plan, Canteen, SimpleAdapter2
 from apscheduler.schedulers.background import BackgroundScheduler
 from apscheduler.triggers.cron import CronTrigger
 
@@ -13,7 +13,7 @@ class MensaParser:
         self._plan = None
         self._fs_et_plan = None
         self._last_updated = None
-        self._canteens = {Canteen.UL_UNI_Sued, Canteen.UL_UNI_West, Canteen.UL_UNI_Nord}
+        self._canteens = {Canteen.UL_UNI_Sued, Canteen.UL_UNI_West}
 
     def refresh_plan(self):
         update = datetime.datetime.now()
@@ -24,19 +24,12 @@ class MensaParser:
 
         self._plan = format_meals(unformatted, SimpleAdapter2)
         self._plan["last_updated"] = self._last_updated
-        self._fs_et_plan = format_meals(unformatted, FsEtAdapter)
-        self._fs_et_plan["last_updated"] = self._last_updated
 
     def get_plan(self):
         if self._plan is None:
             print("plan is none, so parsing mensa plan")
             self.refresh_plan()
         return self._plan
-
-    def get_fs_plan(self):
-        if self._fs_et_plan is None:
-            self.refresh_plan()
-        return self._fs_et_plan
 
 
 mensa_parser = MensaParser()
