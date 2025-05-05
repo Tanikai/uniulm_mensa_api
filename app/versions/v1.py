@@ -9,14 +9,15 @@ router = APIRouter()
 
 
 @router.get("/canteens/all")
-def return_all_canteens(mensa_parser: Annotated[Any, Depends(get_mensa_parser)]):
-    formatted = mensa_parser.get_plan()
+def return_all_canteens(mensa_parser: Annotated[Any, Depends(get_mensa_parser)], lang: str = "de"):
+    formatted = mensa_parser.get_plan(lang)
     return formatted
 
 
 @router.get("/canteens/{mensa_id}/days/{mensa_date}/meals")
-def return_mensaplan(mensa_id: str, mensa_date: str, mensa_parser: Annotated[MensaParser, Depends(get_mensa_parser)]):
-    formatted = mensa_parser.get_plan()
+def return_mensaplan(mensa_id: str, mensa_date: str, mensa_parser: Annotated[MensaParser, Depends(get_mensa_parser)],
+                     lang: str = "de"):
+    formatted = mensa_parser.get_plan(lang)
     try:
         day_plan = formatted[mensa_id][mensa_date]
         return day_plan
@@ -25,8 +26,8 @@ def return_mensaplan(mensa_id: str, mensa_date: str, mensa_parser: Annotated[Men
 
 
 @router.get("/canteens/{mensa_id}")
-def return_next_plan(mensa_id: str, mensa_parser: Annotated[MensaParser, Depends(get_mensa_parser)]):
-    formatted = mensa_parser.get_plan()
+def return_next_plan(mensa_id: str, mensa_parser: Annotated[MensaParser, Depends(get_mensa_parser)], lang: str = "de"):
+    formatted = mensa_parser.get_plan(lang)
 
     day = date.today()
     found = False
@@ -53,8 +54,8 @@ def return_next_plan(mensa_id: str, mensa_parser: Annotated[MensaParser, Depends
 
 
 @router.get("/canteens/{mensa_id}/all")
-def return_all(mensa_id: str, mensa_parser: Annotated[Any, Depends(get_mensa_parser)]):
-    formatted = mensa_parser.get_plan()
+def return_all(mensa_id: str, mensa_parser: Annotated[Any, Depends(get_mensa_parser)], lang: str = "de"):
+    formatted = mensa_parser.get_plan(lang)
     try:
         day_plan = formatted[mensa_id]
         return day_plan
