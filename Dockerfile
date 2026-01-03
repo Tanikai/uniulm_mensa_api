@@ -1,10 +1,22 @@
+# Stage 1: Builder
+FROM python:3.13-slim AS builder
+
+WORKDIR /code
+
+COPY --from=ghcr.io/astral-sh/uv:latest /uv /uvx /bin/
+
+COPY pyproject.toml uv.lock /code/
+
+RUN uv export --format requirements-txt > requirements.txt
+
+# Stage 2: Final
 FROM python:3.13
 
 WORKDIR /code
 
-COPY ./requirements.txt /code/requirements.txt
+COPY --from=builder /code/requirements.txt /code/
 
-RUN pip install --no-cache-dir --upgrade -r /code/requirements.txt
+RUN pip install --no-cache-dir --upgrade -r requirements.txt
 
 COPY ./app /code/app
 

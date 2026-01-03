@@ -1,5 +1,5 @@
 import datetime
-from uniulm_mensaparser import format_meals, get_unformatted_plan, Canteen, SimpleAdapter2
+from uniulm_mensaparser import get_plan_by_language, Canteen, SimpleAdapter2
 from apscheduler.schedulers.background import BackgroundScheduler
 from apscheduler.triggers.cron import CronTrigger
 
@@ -21,11 +21,8 @@ class MensaParser:
         update = update.replace(microsecond=0)
         self._last_updated = update.isoformat()
 
-        unformatted_de = get_unformatted_plan(self._canteens, "de")
-        unformatted_en = get_unformatted_plan(self._canteens, "en")
-
-        self._plan_de = format_meals(unformatted_de, SimpleAdapter2)
-        self._plan_en = format_meals(unformatted_en, SimpleAdapter2)
+        self._plan_de = get_plan_by_language("de", self._canteens, SimpleAdapter2)
+        self._plan_en = get_plan_by_language("en", self._canteens, SimpleAdapter2)
         self._plan_de["last_updated"] = self._last_updated
         self._plan_en["last_updated"] = self._last_updated
 
