@@ -701,15 +701,15 @@ requires-dist = [
 
 [[package]]
 name = "uniulm-mensaparser"
-version = "1.0.0"
+version = "1.0.1"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "aiohttp" },
     { name = "beautifulsoup4" },
 ]
-sdist = { url = "https://files.pythonhosted.org/packages/fe/f6/38d40e1fb8ec490146a84e821ae5f7befe83603261d40896e8e4fca29f0e/uniulm_mensaparser-1.0.0.tar.gz", hash = "sha256:7f0bbbf0b222789311e6c3008211b2392e8d028d3c68e1e78c9f63a9c20d5bac", size = 156542, upload-time = "2026-01-03T13:45:40.844Z" }
+sdist = { url = "https://files.pythonhosted.org/packages/e0/db/dd17af8604ad8b50f1337d716b577cc451bdfbf296a385d07e15ab790352/uniulm_mensaparser-1.0.1.tar.gz", hash = "sha256:f290cc617428f59a4597f9e14ce20f6f4802cebc1a5dbba32f30bbe6aa978e79", size = 156542, upload-time = "2026-01-03T14:04:34.484Z" }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/c0/e7/be2542a5d0df56886354f82ea5c0a8e24d48c1cdbd736de3aed4f990a648/uniulm_mensaparser-1.0.0-py3-none-any.whl", hash = "sha256:5b939fec2ed22057bc45a97e9786cb5efaa18e31b5a3a49dd2dc15fc54093db3", size = 23735, upload-time = "2026-01-03T13:45:39.079Z" },
+    { url = "https://files.pythonhosted.org/packages/5e/34/8b04b12f03c40d6820acfedc5874f45e3b0bbc923c65290dd08f729bd4ad/uniulm_mensaparser-1.0.1-py3-none-any.whl", hash = "sha256:61f0bd3d04ae67c5fad415dab63b49b3a6ef86a4213a8eb864148ed4ec94823b", size = 23740, upload-time = "2026-01-03T14:04:33.122Z" },
 ]
 
 [[package]]
