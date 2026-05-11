@@ -9,6 +9,6 @@ dependencies = [
     "fastapi==0.109.1",
     "pydantic-settings==2.0.3",
     "umami-asgi==0.2.0",
-    "uniulm-mensaparser>=1.0.0",
+    "uniulm-mensaparser>=1.0.2",
     "uvicorn==0.23.2",
 ]

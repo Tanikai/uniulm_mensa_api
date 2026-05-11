@@ -695,21 +695,21 @@ requires-dist = [
     { name = "fastapi", specifier = "==0.109.1" },
     { name = "pydantic-settings", specifier = "==2.0.3" },
     { name = "umami-asgi", specifier = "==0.2.0" },
-    { name = "uniulm-mensaparser", specifier = ">=1.0.0" },
+    { name = "uniulm-mensaparser", specifier = ">=1.0.2" },
     { name = "uvicorn", specifier = "==0.23.2" },
 ]
 
 [[package]]
 name = "uniulm-mensaparser"
-version = "1.0.1"
+version = "1.0.2"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "aiohttp" },
     { name = "beautifulsoup4" },
 ]
-sdist = { url = "https://files.pythonhosted.org/packages/e0/db/dd17af8604ad8b50f1337d716b577cc451bdfbf296a385d07e15ab790352/uniulm_mensaparser-1.0.1.tar.gz", hash = "sha256:f290cc617428f59a4597f9e14ce20f6f4802cebc1a5dbba32f30bbe6aa978e79", size = 156542, upload-time = "2026-01-03T14:04:34.484Z" }
+sdist = { url = "https://files.pythonhosted.org/packages/93/73/eddf5ce4982e96b16472f4abb16908414d12ce576a64975431436e7ffce4/uniulm_mensaparser-1.0.2.tar.gz", hash = "sha256:ce3982076ada9f45223ded09418fc423286f3b6e8e7b9e9a5bfa47bee50ce467", size = 157038, upload-time = "2026-05-11T13:20:50.411Z" }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/5e/34/8b04b12f03c40d6820acfedc5874f45e3b0bbc923c65290dd08f729bd4ad/uniulm_mensaparser-1.0.1-py3-none-any.whl", hash = "sha256:61f0bd3d04ae67c5fad415dab63b49b3a6ef86a4213a8eb864148ed4ec94823b", size = 23740, upload-time = "2026-01-03T14:04:33.122Z" },
+    { url = "https://files.pythonhosted.org/packages/ce/80/6f807a6d3da606817c6104f9b2db933afbce6729727dac9441938bce37b9/uniulm_mensaparser-1.0.2-py3-none-any.whl", hash = "sha256:a885177025e0c719e50cf8e2a38b6ff90b4f54750a0b0b723bade9c097a2fed0", size = 23962, upload-time = "2026-05-11T13:20:51.757Z" },
 ]
 
 [[package]]
