@@ -1,22 +1,15 @@
-# Stage 1: Builder
-FROM python:3.13-slim AS builder
+FROM python:3.13-slim
 
 WORKDIR /code
 
-COPY --from=ghcr.io/astral-sh/uv:latest /uv /uvx /bin/
+ENV UV_COMPILE_BYTECODE=1 UV_LINK_MODE=copy UV_PYTHON_DOWNLOADS=never
 
-COPY pyproject.toml uv.lock /code/
+RUN --mount=from=ghcr.io/astral-sh/uv:latest,source=/uv,target=/bin/uv \
+    --mount=type=bind,source=pyproject.toml,target=pyproject.toml \
+    --mount=type=bind,source=uv.lock,target=uv.lock \
+    uv sync --frozen --no-dev --no-install-project --no-cache
 
-RUN uv export --format requirements-txt > requirements.txt
-
-# Stage 2: Final
-FROM python:3.13
-
-WORKDIR /code
-
-COPY --from=builder /code/requirements.txt /code/
-
-RUN pip install --no-cache-dir --upgrade -r requirements.txt
+ENV PATH="/code/.venv/bin:$PATH"
 
 COPY ./app /code/app
 
